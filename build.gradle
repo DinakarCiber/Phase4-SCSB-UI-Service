@@ -69,7 +69,9 @@ dependencies {
 	implementation('info.freelibrary:freelib-marc4j:2.6.12')
 	implementation(group: 'net.sourceforge.javacsv', name: 'javacsv', version: '2.0')
 	implementation('io.springfox:springfox-swagger2:3.0.0')
-	implementation('org.apache.shiro:shiro-core:1.5.2')
+	//implementation('org.apache.shiro:shiro-core:1.5.2')
+	implementation('org.apache.shiro:shiro-core:1.13.0:jakarta')
+			{exclude module: 'shiro-core'; exclude module: 'shiro-spring'; exclude module: 'shiro-web'}
 	implementation('javax.validation:validation-api:2.0.1.Final')
 	implementation('org.projectlombok:lombok:1.18.28')
 	implementation 'io.micrometer:micrometer-registry-prometheus'
