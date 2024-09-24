@@ -24,6 +24,10 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
+import org.springframework.security.saml2.provider.service.registration.InMemoryRelyingPartyRegistrationRepository;
+import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistration;
+import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository;
+import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrations;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
@@ -80,8 +84,17 @@ public class MultiCASAndOAuthSecurityConfiguration extends WebSecurityConfigurer
                 .addFilterBefore(reCAPLogoutFilter(), LogoutFilter.class)
                 .addFilterBefore(requestCasGlobalLogoutFilter(), LogoutFilter.class);
 
-        http.authorizeRequests().antMatchers("/", "/home", "/actuator", "/actuator/prometheus").permitAll()
+        http.authorizeRequests().antMatchers("/","/saml2/**","/saml/**", "/home", "/actuator", "/actuator/prometheus").permitAll()
                 .antMatchers("*").authenticated().anyRequest().authenticated();
+        http.saml2Login(saml2 -> {
+                    try {
+                        saml2
+                                .relyingPartyRegistrationRepository(relyingPartyRegistrations());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
 
         SessionManagementConfigurer<HttpSecurity> httpSecuritySessionManagementConfigurer = http.sessionManagement();
         httpSecuritySessionManagementConfigurer.invalidSessionUrl("/home");
@@ -93,6 +106,14 @@ public class MultiCASAndOAuthSecurityConfiguration extends WebSecurityConfigurer
         // @formatter:on
     }
 
+    @Bean
+    public RelyingPartyRegistrationRepository relyingPartyRegistrations() {
+        RelyingPartyRegistration registration = RelyingPartyRegistrations
+                .fromMetadataLocation("idp-metadata.xml")
+                .registrationId("recap")
+                .build();
+        return new InMemoryRelyingPartyRegistrationRepository(registration);
+    }
 
     /**
      * Register the CAS global logout filter.

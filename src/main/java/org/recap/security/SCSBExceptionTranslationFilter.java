@@ -201,15 +201,15 @@ public class SCSBExceptionTranslationFilter extends GenericFilterBean {
             String authType = HelperUtil.getBean(PropertyUtil.class).getPropertyByInstitutionAndKey(institution, PropertyKeyConstants.ILS.ILS_AUTH_TYPE);
             if(StringUtils.equals(authType, ScsbConstants.AUTH_TYPE_OAUTH)) {
                 this.authenticationEntryPoint.commence(request,response,reason);
-            } else {
+            }
+          /*  else {
                 String url = HelperUtil.getBean(PropertyUtil.class).getPropertyByInstitutionAndKey(institution, PropertyKeyConstants.ILS.ILS_AUTH_SERVICE_LOGIN);
-
                 //Calling cas entry point based on institution type.
                 CasAuthenticationEntryPoint casAuthenticationEntryPoint = new CasAuthenticationEntryPoint();
                 casAuthenticationEntryPoint.setLoginUrl(url);
                 casAuthenticationEntryPoint.setServiceProperties(casPropertyProvider.getServiceProperties());
                 casAuthenticationEntryPoint.commence(request, response, reason);
-            }
+            }*/
         } else {
             response.sendRedirect("/");
         }
