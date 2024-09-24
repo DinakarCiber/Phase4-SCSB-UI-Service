@@ -39,7 +39,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  * Created by sheiks on 30/01/17.
  */
 @Configuration
-@EnableOAuth2Sso
+/*@EnableOAuth2Sso
+ */
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class MultiCASAndOAuthSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
