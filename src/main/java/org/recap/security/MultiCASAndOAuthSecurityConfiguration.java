@@ -84,14 +84,14 @@ public class MultiCASAndOAuthSecurityConfiguration extends WebSecurityConfigurer
                     }
                 }
         );
-        http.addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)
+       /* http.addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)
                 .addFilterAfter(new SCSBInstitutionFilter(), CsrfCookieGeneratorFilter.class)
                 .addFilterAfter(SCSBExceptionTranslationFilter, ExceptionTranslationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(loginUrlAuthenticationEntryPoint).and()
                // .addFilter(casAuthenticationFilter())
                 .addFilterBefore(reCAPLogoutFilter(), LogoutFilter.class)
-                .addFilterBefore(requestCasGlobalLogoutFilter(), LogoutFilter.class);
+                .addFilterBefore(requestCasGlobalLogoutFilter(), LogoutFilter.class);*/
 
         http.authorizeRequests().antMatchers("/","/saml2/**","/saml/**", "/home", "/actuator", "/actuator/prometheus").permitAll()
                 .antMatchers("*").authenticated().anyRequest().authenticated();
